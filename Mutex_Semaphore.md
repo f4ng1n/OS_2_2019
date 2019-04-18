@@ -5,23 +5,24 @@
 - Trên một hệ điều hành thường có nhiều chương trình (tác vụ -task) chạy đồng thời. Mutex giúp ngăn chặn việc 2 task cùng lúc truy cập vào cùng 1 tài nguyên (trong phạm vi bài lab và chiếu theo методичка thì ta gọi vùng tài nguyên đó là критический участок - critical area), register gọi chung là critical section của hệ thống trong cùng 1 thời điểm.
 - Cơ chế của Mutex được dùng cho hardware và cả software (rất phổ biến).
 - Hiểu đơn giản: Mutex có 1 chức năng gọi là lock(khóa). Nó sẽ khóa vùng CS (critical section) cho đến khi task 1 hoàn thành, thì nó mở khóa (unlock) cho task 2 thực thi nhiệm vụ của mình, tránh xung đột tài nguyên hệ thống.
- ví dụ mô tả bởi code:
- void task1()
+ ví dụ mô tả bởi code:  
+ void task1()  
  {
- //wait until unlock CS
- osMutexWait();
- //main activities
- @to do
- //unlock CS 
- osMutexRelease() // hàm giải phóng 
- }
+ //wait until unlock CS  
+ osMutexWait();  
+ //main activities  
+ @to do  
+ //unlock CS   
+ osMutexRelease() // hàm giải phóng   
+ }  
  ## 2. Semaphore
  ![alt](http://media.thanhnt.com/2015/07/RTOS-Semaphore.png)
  Là kiểu dữ liệu biến hoặc trừu tượng được dùng để kiểm soát truy cập vào một tài nguyên chung bằng nhiều quy trình trong một hệ thống đồng thời, hoặc là 1 hệ điều hành đa nhiệm (theo wikipedia)
  - Để thỏa mãn yêu cầu loại trừ lẫn nhau của các luồng khi truy cập vào cùng tài nguyên hệ thống (CS) thì ta sử dụng semaphores.
  - Semaphores có thể chia thành: Nhị phân (Двоичные) và Tổng quát (Общие); hoặc là Định danh (Именованные) và Vô danh (Неименованные).
  - Semaphore nhị phân = Mutex - chứa chỉ 2 trạng thái: Capture (захвачен) và Release (Свободен).
-  - Nếu CS free, thì thread sẽ thực hiện capture (chụp) của Mutex, chặn và ko cho vào vùng CS. Việc chặn luồng này và việc xâm nhập vào CS được diễn ra chỉ khi mà tác vụ trước đó đã xâm nhập, đi ra khỏi CS và giải phóng cho mutex.
+  - Nếu CS free, thì thread sẽ thực hiện capture (chụp) của Mutex, và đi vào vùng CS. Khi đi ra khỏi CS thì thread giải phóng Mutex.  
+  - Nếu CS bận, thì thread sẽ capture Mutex, chặn và không đi vào CS. Việc bỏ chặn thread  và đi vào CS được thực hiện chỉ khi task trước (đã vào CS) đi ra khỏi CS và giải phóng Mutex.
   - Semaphore khác Mutex ở điểm: 
    - Nhiều hơn giá trị trạng thái (status) được sử dụng trong bộ đếm. Nói cách khác, Semaphore hỗ trợ multi process. (Семафор отличается от мьютекса большим числом состояний за счет использования внутреннего счетчика. Это позволяет обеспечить большее разнообразие правил нахождения потоков в критическом участке.)  Ví dụ: Đối với Mutex, task nào lock tài nguyên (CS) thì chính task đó phải unlock CS. Còn đối với Semaphore thì cho phép task khác nào đó có thể unlock CS nếu cần thiết.
    - Khi một task đang giữ mutex, hệ điều hành cho phép xóa mutex đó nếu cần thiết. Còn Semaphore không hỗ trợ điều này.
@@ -63,6 +64,6 @@ int sem_post(sem_t *sem).
 
 int sem_destroy(sem_t *sem).
 
-- Nếu luồng,
+
 
  
