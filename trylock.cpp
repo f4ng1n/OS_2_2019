@@ -1,4 +1,4 @@
-/trylock/main.cpp
+//trylock/main.cpp
 #include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
